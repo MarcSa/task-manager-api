@@ -21,11 +21,28 @@ beforeEach( async () =>{
 })
 
 test('Should singup a new user', async () => {
-    await request(app).post('/users').send({
+    const response = await request(app).post('/users').send({
         name: 'masa',
         email: 'marcsantamariatomasa@example.com',
         password: 'mA77667-'
     }).expect(201)
+
+
+    // Assert that the database was changed correctly
+
+    const user = await User.findById(response.body.user._id)
+    expect(user).not.toBeNull()
+    
+    //assertions about the response
+
+    expect(response.body).toMatchObject({
+        user: {
+            name: 'masa',
+            email: 'marcsantamariatomasa@example.com',
+        },
+        token: user.tokens[0].token
+    })
+    expect(user.password).not.toBe('mA77667-')
 })
 
 test('Should login existing user', async () => {
@@ -71,3 +88,4 @@ test('Should not delete accouts for unauthenticated user', async () => {
         .send()
         .expect(401) 
 })
+
