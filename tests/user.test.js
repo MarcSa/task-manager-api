@@ -46,17 +46,19 @@ test('Should singup a new user', async () => {
 })
 
 test('Should login existing user', async () => {
-    await request(app).post('/users/login').send({
+    const response = await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
     }).expect(200)
+    const user = await User.findById(userOneId)
+    expect(response.body.token).toBe(user.tokens[1].token)
 })
 
 test('Should not login nonexisting user', async () => {
     await request(app).post('/users/login').send({
         email: 'john@example.com',
         password:'John123!-'
-    }).expect(400)
+    }).expect(400) 
 })
 
 test('Should get profile for user', async () => {
@@ -75,11 +77,16 @@ test('Should not get profile for unauthenticated user', async () => {
 })
 
 test('Should delete accouts for user', async () => {
-    await request(app)
+    const response = await request(app)
         .delete('/users/me')
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
-        .expect(200) 
+        .expect(200)
+    
+    const user = await User.findById(userOneId)
+    expect(user).toBeNull()
+    
+
 })
 
 test('Should not delete accouts for unauthenticated user', async () => {
