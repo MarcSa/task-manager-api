@@ -104,9 +104,6 @@ userSchema.statics.findByCredentials = async (email, password) =>{
 }
 
 
-
-
-
 /**
 * MV
 * 01/01/2020, 19:33h
