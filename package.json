@@ -24,7 +24,7 @@
     "mongoose": "^5.9.20",
     "multer": "^1.4.2",
     "save-dev": "0.0.1-security",
-    "sharp": "^0.25.4",
+    "sharp": "^0.30.5",
     "tape": "^5.0.1",
     "validator": "^13.1.1"
   },
